@@ -1,98 +1,38 @@
-<!doctype html>
-<html lang="en" data-bs-theme="auto">
-  <head><script src="../assets/js/color-modes.js"></script>
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import time
+from urllib.parse import urlparse, parse_qs
 
+# Для начала определим настройки запуска
+hostName = "localhost" # Адрес для доступа по сети
+serverPort = 8080 # Порт для доступа по сети
+
+class MyServer(BaseHTTPRequestHandler):
+    """ 
+        Специальный класс, который отвечает за 
+        обработку входящих запросов от клиентов
+    """
+    def __get_html_content(self):
+        return """
+        <!doctype html>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.112.5">
-    <title>Sidebars · Bootstrap v5.3</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
-
-
-<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-      }
 
-      .b-example-divider {
-        width: 100%;
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-      }
-
-      .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-      }
-
-      .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-      }
-
-      .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-      }
-
-      .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .btn-bd-primary {
-        --bd-violet-bg: #712cf9;
-        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-        --bs-btn-font-weight: 600;
-        --bs-btn-color: var(--bs-white);
-        --bs-btn-bg: var(--bd-violet-bg);
-        --bs-btn-border-color: var(--bd-violet-bg);
-        --bs-btn-hover-color: var(--bs-white);
-        --bs-btn-hover-bg: #6528e0;
-        --bs-btn-hover-border-color: #6528e0;
-        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-        --bs-btn-active-color: var(--bs-btn-hover-color);
-        --bs-btn-active-bg: #5a23c8;
-        --bs-btn-active-border-color: #5a23c8;
-      }
-      .bd-mode-toggle {
-        z-index: 1500;
-      }
+        .content {
+            flex-grow: 1;
+        }
     </style>
-
-
-    <!-- Custom styles for this template -->
-    <link href="sidebars.css" rel="stylesheet">
-  </head>
-  <body>
+</head>
+<body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <symbol id="check2" viewBox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
@@ -220,11 +160,11 @@
 				<form>
 					<div class="mb-3">
 						 <label for="exampleInputName" class="form-label">Имя</label>
-						<input type="text" class="form-control" id="exampleInputName" aria-describedby="emailHelp">
+						<input name="name" type="text" class="form-control" id="exampleInputName" aria-describedby="emailHelp">
 					</div>
 					<div class="mb-3">
 						<label for="exampleInputEmail" class="form-label">Email</label>
-						<input type="email" class="form-control" id="exampleInputEmail">
+						<input name="email" type="email" class="form-control" id="exampleInputEmail">
 					</div>
 					<div class="mb-3">
 						<label for="exampleFormControlTextarea1" class="form-label">Сообщение</label>
@@ -249,10 +189,33 @@
 		</div>
 	</div>
 
-
-
-  </body>
-<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="sidebars.js"></script></body>
+</body>
 </html>
+        """
+
+    def do_GET(self):
+        """ Метод для обработки входящих GET-запросов """
+        query_components = parse_qs(urlparse(self.path).query)
+        print(query_components)
+        page_content = self.__get_html_content()
+        self.send_response(200) # Отправка кода ответа
+        self.send_header("Content-type", "text/html") # Отправка типа данных, который будет передаваться
+        self.end_headers() # Завершение формирования заголовков ответа
+        self.wfile.write(bytes(page_content, "utf-8")) # Тело ответа
+
+if __name__ == "__main__":        
+    # Инициализация веб-сервера, который будет по заданным параметрам в сети 
+    # принимать запросы и отправлять их на обработку специальному классу, который был описан выше
+    webServer = HTTPServer((hostName, serverPort), MyServer)
+    print("Server started http://%s:%s" % (hostName, serverPort))
+
+    try:
+        # Cтарт веб-сервера в бесконечном цикле прослушивания входящих запросов
+        webServer.serve_forever()
+    except KeyboardInterrupt:
+        # Корректный способ остановить сервер в консоли через сочетание клавиш Ctrl + C
+        pass
+
+    # Корректная остановка веб-сервера, чтобы он освободил адрес и порт в сети, которые занимал
+    webServer.server_close()
+    print("Server stopped.")
