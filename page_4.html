@@ -214,35 +214,42 @@
       <h1 class="display-4 fw-normal text-body-emphasis">Контакты</h1>
     </div>
 
-    <div>
-      <div class="bd-example-snippet bd-code-snippet"><div class="bd-example m-5 border-0">
-        <form>
-          <div class="mb-3">
-             <label for="exampleInputName" class="form-label">Имя</label>
-            <input type="text" class="form-control" id="exampleInputName" aria-describedby="emailHelp">
-           </div>
-          <div class="mb-3">
-            <label for="exampleInputEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="exampleInputEmail">
-          </div>
-          <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Сообщение</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-          </div>
+	<div class="row"> <!--добавил сюда блок с классом row, всего в ряду 12 ячеек их количество можно расположение и размеры блока рекулировать-->
+		<div class="col-md-4">   <!--объединили 4 ячеки и засунули в них форму-->
+			<div class="bd-example-snippet bd-code-snippet"><div class="bd-example m-5 border-0">
+				<form>
+					<div class="mb-3">
+						 <label for="exampleInputName" class="form-label">Имя</label>
+						<input type="text" class="form-control" id="exampleInputName" aria-describedby="emailHelp">
+					</div>
+					<div class="mb-3">
+						<label for="exampleInputEmail" class="form-label">Email</label>
+						<input type="email" class="form-control" id="exampleInputEmail">
+					</div>
+					<div class="mb-3">
+						<label for="exampleFormControlTextarea1" class="form-label">Сообщение</label>
+						<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+					</div>
+						<button type="submit" class="btn btn-primary">Отправить</button>
+				</form>
+			</div>
+		</div>
+
+	</div>
+
+		<div class="col-md-4"> <!--здесь тоже объединил 4 ячейки и в них поместили текст, в ряду отсалось ещё 4 ячейки(12-4-4=4), но смотри чтобы в классе col-md-(и подобных, там для разного разрешения экрана разные делают) всегда в сумме было не более 12, типо col-md-4 + col-md-8 это ок, col-md-8 + col-md-8 не ок-->
+			<div class="row align-items-md-stretch">
+				<div class="col-md-12">
+					<div class="h-100 p-5">
+						<h2>Наши контакты</h2>
+						<p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
-          <button type="submit" class="btn btn-primary">Отправить</button>
-        </form>
-      </div></div>
-
-    <div class="row align-items-md-stretch">
-      <div class="col-md-6">
-        <div class="h-100 p-5">
-          <h2>Наши контакты</h2>
-          <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-        </div>
-      </div>
-    </div>
 
   </body>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
